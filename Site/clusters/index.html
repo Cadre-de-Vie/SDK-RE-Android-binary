@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../img/favicon.ico">
-  <title>Favoris - Cadre De Vie SDK Android</title>
+  <title>Clusters - Cadre De Vie SDK Android</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../css/theme.css" type="text/css" />
@@ -17,9 +17,9 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Favoris";
-    var mkdocs_page_input_path = "favorites.md";
-    var mkdocs_page_url = "/favorites/";
+    var mkdocs_page_name = "Clusters";
+    var mkdocs_page_input_path = "clusters.md";
+    var mkdocs_page_url = "/clusters/";
   </script>
   
   <script src="../js/jquery-2.1.1.min.js"></script>
@@ -72,9 +72,15 @@
     <a class="" href="../property_search/">Recherche de properties</a>
 	    </li>
           
-            <li class="toctree-l1">
+            <li class="toctree-l1 current">
 		
-    <a class="" href="../clusters/">Clusters</a>
+    <a class="current" href="./">Clusters</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#object-cdvcluster">Object CDVCluster</a></li>
+    
+
+    </ul>
 	    </li>
           
             <li class="toctree-l1">
@@ -82,18 +88,9 @@
     <a class="" href="../alerts/">Alertes</a>
 	    </li>
           
-            <li class="toctree-l1 current">
+            <li class="toctree-l1">
 		
-    <a class="current" href="./">Favoris</a>
-    <ul class="subnav">
-            
-    <li class="toctree-l2"><a href="#marquer-une-property-comme-favorites">Marquer une property comme favorites</a></li>
-    
-
-    <li class="toctree-l2"><a href="#supprimer-un-favori">Supprimer un favori</a></li>
-    
-
-    </ul>
+    <a class="" href="../favorites/">Favoris</a>
 	    </li>
           
             <li class="toctree-l1">
@@ -123,7 +120,7 @@
     
       
     
-    <li>Favoris</li>
+    <li>Clusters</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -133,35 +130,33 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="marquer-une-property-comme-favorites">Marquer une property comme favorites</h1>
-<p><code>existingProperty</code> est une variable de type CDVProperty obtenue lors d'une recherche</p>
-<pre><code class="java">  new CDVManager.CreateFavoriteTask(existingProperty, new CDVManager.NoResponseHandler() {
-            @Override
-            public void result(CDVException e) {
-                if (e != null &amp;&amp; e.getNativeException() == null) {
-                    System.out.println(&quot;Add Favorite Error : &quot; + e.getErrorMessage());
-                } else if (e != null &amp;&amp; e.getNativeException() != null) {
-                    e.getNativeException().printStackTrace();
-                } else {
-                    System.out.println(&quot;Favorite Property added&quot;);
+                <h1 id="object-cdvcluster">Object CDVCluster</h1>
+<pre><code class="java">/** Cluster Properties count in cluster */
+private Integer _cdvCount = null;
 
-                }}}).execute();
+/** Cluster Latitude */
+private Double _cdvLat = null;
 
-</code></pre>
+/** Cluster Longitude */
+private Double _cdvLng = null;
 
-<h1 id="supprimer-un-favori">Supprimer un favori</h1>
-<pre><code class="java">new CDVManager.DeleteFavoriteTask(propertyToRemove, new CDVManager.NoResponseHandler() {
-                                        @Override
-                                        public void result(CDVException e) {
-                                            if (e != null &amp;&amp; e.getNativeException() == null) {
-                                                System.out.println(&quot;Delete Favorite Error : &quot; + e.getErrorMessage());
-                                            } else if (e != null &amp;&amp; e.getNativeException() != null) {
-                                                e.getNativeException().printStackTrace();
-                                            } else {
-                                                System.out.println(&quot;Favorite Property removed&quot;);
-                                            }
-                                        }
-                                    }).execute();
+/** Cluster Minimal Latitude in cluster */
+private Double _cdvMinLat = null;
+
+/** Cluster Minimal Longitude in cluster */
+private Double _cdvMinLng = null;
+
+/** Cluster Maximal Latitude in cluster */
+private Double _cdvMaxLat = null;
+
+/** Cluster Maximal Longitude in cluster */
+private Double _cdvMaxLng = null;
+
+/** Cluster List of properties Ids in cluster */
+private ArrayList&lt;Integer&gt; _cdvPropertiesIds;
+
+/** Cluster is single point */
+private Boolean _cdvSinglePoint;
 </code></pre>
               
             </div>
@@ -170,10 +165,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../poi/" class="btn btn-neutral float-right" title="POIs">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../alerts/" class="btn btn-neutral float-right" title="Alertes">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../alerts/" class="btn btn-neutral" title="Alertes"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../property_search/" class="btn btn-neutral" title="Recherche de properties"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -199,10 +194,10 @@
     <span class="rst-current-version" data-toggle="rst-current-version">
       
       
-        <span><a href="../alerts/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../property_search/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../poi/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../alerts/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
