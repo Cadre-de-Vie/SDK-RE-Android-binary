@@ -80,14 +80,19 @@
 
     <li class="toctree-l2"><a href="#recherche-pour-obtenir-des-cluster-a-fin-daffichage-sur-une-carte">Recherche pour obtenir des cluster à fin d'affichage sur une carte</a></li>
     
+        <ul>
+        
+            <li><a class="toctree-l3" href="#geo-precision-parametrage">Geo Precision (paramétrage)</a></li>
+        
+            <li><a class="toctree-l3" href="#plusieurs-options-sont-disponibles-lors-dune-recherche-de-type-carte">Plusieurs options sont disponibles lors d'une recherche de type "Carte":</a></li>
+        
+        </ul>
+    
 
     <li class="toctree-l2"><a href="#recherche-du-nombre-de-properties">Recherche du nombre de properties</a></li>
     
 
     <li class="toctree-l2"><a href="#recherche-des-proprietes-par-id">Recherche des propriétés par ID</a></li>
-    
-
-    <li class="toctree-l2"><a href="#geo-precision-parametrage">Geo Precision (paramétrage)</a></li>
     
 
     <li class="toctree-l2"><a href="#cdvpropertycdvotherdatas-donnees-complementaires">CDVProperty.cdvOtherDatas (données complementaires)</a></li>
@@ -217,6 +222,26 @@
             }).execute();
 </code></pre>
 
+<h2 id="geo-precision-parametrage">Geo Precision (paramétrage)</h2>
+<p>The GeoHashgrid precision can either be defined in terms of the integer precision levels mentioned in the Elastic Search documentation.
+Values outside of [1,12] will be rejected.
+Alternatively, the precision level can be approximated from a distance measure like "1km", "10m"
+(cf. https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-geohashgrid-aggregation.html)</p>
+<pre><code class="java">propertiesSearch.cdvGeoPrecision = &quot;2&quot;
+
+/* 2 types of possible values (String):
+ * - GeoHashgrid code: '1', '2', ..., '12'
+ * - Distances: '1m', '10km'
+ */
+
+</code></pre>
+
+<h2 id="plusieurs-options-sont-disponibles-lors-dune-recherche-de-type-carte">Plusieurs options sont disponibles lors d'une recherche de type "Carte":</h2>
+<ul>
+<li>cdvHideClusterRect (Boolean) - Ne retourne pas les champs "minlat", "minlng", "maxlat" et "maxlng"</li>
+<li>cdvHidePropertyIds (Boolean) - Ne retourne pas la liste des id "propertiesIds"</li>
+<li>cdvHideSinglePoint (Boolean) - Ne retourne pas le champ "singlePoint"</li>
+</ul>
 <h1 id="recherche-du-nombre-de-properties">Recherche du nombre de properties</h1>
 <p>Cette recherche permet d'obtenir uniquement le nombre de properties correspondant à une recherche, et non détails sur les properties</p>
 <pre><code class="java"> new CDVManager.CountPropertiesTask(_propertiesSearch, new CDVManager.CountPropertiesResponseHandler() {
@@ -256,20 +281,6 @@ ArrayList&lt;Integer&gt; _propertiesIds = new ArrayList&lt;Integer&gt;();
                                 }
                             }
                         }).execute();
-
-</code></pre>
-
-<h1 id="geo-precision-parametrage">Geo Precision (paramétrage)</h1>
-<p>The GeoHashgrid precision can either be defined in terms of the integer precision levels mentioned in the Elastic Search documentation.
-Values outside of [1,12] will be rejected.
-Alternatively, the precision level can be approximated from a distance measure like "1km", "10m"
-(cf. https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-geohashgrid-aggregation.html)</p>
-<pre><code class="java">propertiesSearch.cdvGeoPrecision = &quot;2&quot;
-
-/* 2 types of possible values (String):
- * - GeoHashgrid code: '1', '2', ..., '12'
- * - Distances: '1m', '10km'
- */
 
 </code></pre>
 
