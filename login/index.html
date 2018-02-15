@@ -212,7 +212,26 @@
 
 <h1 id="login">Login</h1>
 <p>Le SDK permet à l'utilisateur de se logger avec son adresse email, et son mot de passe.
-Une fois le login passée avec succès, le token utilisateur est envoyé automatiquement par le SDK à chaque appel, sans action du développeur.```</p>
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; Updated upstream
+Une fois le login passée avec succès, le token utilisateur est envoyé automatiquement par le SDK à chaque appel, sans action du développeur.```
+=======
+Une fois le login passée avec succès, le token utilisateur est envoyé automatiquement par le SDK à chaque appel, sans action du développeur.</p>
+<p>Le SDK récupère aussi le tokenK, pour usage de l'api K. Il peut être renouvellé via <em>CDVManager.MeTask</em></p>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>Stashed changes</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
 <pre><code class="java">
  new CDVManager.LoginTask(&quot;user@mondomain.com&quot;, &quot;monpassword&quot;, new CDVManager.LoginResponseHandler() {
 
@@ -232,6 +251,7 @@ Une fois le login passée avec succès, le token utilisateur est envoyé automat
 </code></pre>
 
 <h1 id="recuperer-les-details-sur-lutilisateur-logge">Récupérer les détails sur l'utilisateur loggé</h1>
+<p>Le SDK récupère aussi un nouveau tokenK, pour usage de l'api K</p>
 <pre><code class="java">
  new CDVManager.MeTask(new CDVManager.UserResponseHandler() {
 

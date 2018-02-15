@@ -95,6 +95,15 @@
     <li class="toctree-l2"><a href="#recherche-des-proprietes-par-id">Recherche des propriétés par ID</a></li>
     
 
+    <li class="toctree-l2"><a href="#tri-des-proprietes">Tri des propriétés</a></li>
+    
+
+    <li class="toctree-l2"><a href="#parent-types-type-des-proprietes">Parent types (Type des propriétés)</a></li>
+    
+
+    <li class="toctree-l2"><a href="#style-types-style-des-proprietes">Style types (Style des propriétés)</a></li>
+    
+
     <li class="toctree-l2"><a href="#cdvpropertycdvotherdatas-donnees-complementaires">CDVProperty.cdvOtherDatas (données complementaires)</a></li>
     
 
@@ -155,7 +164,16 @@
               
                 <p>L'API permet de rechercher les properties correspondant à des critères géographiques, ou des critères de la property (surface, nombre de pièces...)</p>
 <h1 id="criteres-de-recherche">Critères de recherche</h1>
-<p>Pour effectuer une recheche il faut créer un objet de type CDVPropertySearch et lui définir les attributs à rechercher. </p>
+<p>Pour effectuer une recheche, il faut créer un objet de type CDVPropertySearch et lui définir les attributs à rechercher</p>
+<p>Il est possible de préciser une recheche avec des critères géographiques en utilisant :</p>
+<ul>
+<li>des cercles (cdvGeoDistance) : une distance en kilomètres autour d'un point central en coordonnées GPS (lat,lng). Voir ci-dessous l'autre usage de cdvGeoDistances en tant que filtre des résultats et non plus critère de recherche ;</li>
+<li>des polygones (cdvGeoPolygons) : au moins 3 points en coordonnées GPS (lat,lng).</li>
+</ul>
+<p>Il est possible de limiter les résultats retournés à ceux visibles dans le viewport d'une carte :</p>
+<ul>
+<li>viewport (cdvGeoBoundingBox) : obligatoirement caractérisé par ses coordonnées GPS, d'abord Nord-Est (lat,lng) puis Sud-Ouest (lat,lng).</li>
+</ul>
 <p>Il est possible de limiter une recheche sur des critères géographiques en utilisant des polygones, une distance (en kilomètres) autour d'un point, ou une bounding box</p>
 <pre><code class="java">
  CDVPropertySearch _propertiesSearch = new CDVPropertySearch();
@@ -227,6 +245,13 @@
 Values outside of [1,12] will be rejected.
 Alternatively, the precision level can be approximated from a distance measure like "1km", "10m"
 (cf. https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-geohashgrid-aggregation.html)</p>
+<p>La précsion du regroupement par cluster, maillage ou fonction <em>GeoHashgrid</em>, définie de 3 façons :</p>
+<ul>
+<li>la valeur zéro "0" : indique que le calcul des clusters doit être désactivé pour renvoyer la liste de tous les points individuels, chacun dans un pseudo-cluster</li>
+<li>une valeur entière, de [1,9] (ne pas utiliser 10,11 et 12) : indique que le calcul des clusters est activé pour regrouper les points dans des clusters d'une largeur/hauter telles que définies dans la documentation de Elastic (cf. https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-geohashgrid-aggregation.html)</li>
+<li>une distance reconnue par Elastic telle que "1km","100m" (voir la documentation officielle) : indique que le calcul des clusters est activé pour regrouper les points dans des clusters de cette largeur/hauteur (e.g. 1km x 1km)</li>
+<li>toute autre valeur entière ou réelle au-delà de ces bornes sera ignorée</li>
+</ul>
 <pre><code class="java">propertiesSearch.cdvGeoPrecision = &quot;2&quot;
 
 /* 2 types of possible values (String):
@@ -238,9 +263,9 @@ Alternatively, the precision level can be approximated from a distance measure l
 
 <h2 id="plusieurs-options-sont-disponibles-lors-dune-recherche-de-type-carte">Plusieurs options sont disponibles lors d'une recherche de type "Carte":</h2>
 <ul>
-<li>cdvHideClusterRect (Boolean) - Ne retourne pas les champs "minlat", "minlng", "maxlat" et "maxlng"</li>
-<li>cdvHidePropertyIds (Boolean) - Ne retourne pas la liste des id "propertiesIds"</li>
-<li>cdvHideSinglePoint (Boolean) - Ne retourne pas le champ "singlePoint"</li>
+<li>hideClusterRect (Boolean) - Ne calcule pas et ne renvoie pas les champs "minlat", "minlng", "maxlat" et "maxlng" décrivant le rectangle géographique dans lequel tous les points d'un cluster sont contenus</li>
+<li>hidePropertyIds (Boolean) - Ne renvoie pas la liste des id "propertiesIds"</li>
+<li>hideSinglePoint (Boolean) - Ne calcule pas et ne renvoie pas le champ "singlePoint" précisant si le cluster peut être éclaté en augmentant la valeur de Geo Precision (cluster "éclatable" limité à 5m x 5m, donc cdvGeoPrecision = 9)</li>
 </ul>
 <h1 id="recherche-du-nombre-de-properties">Recherche du nombre de properties</h1>
 <p>Cette recherche permet d'obtenir uniquement le nombre de properties correspondant à une recherche, et non détails sur les properties</p>
@@ -281,6 +306,51 @@ ArrayList&lt;Integer&gt; _propertiesIds = new ArrayList&lt;Integer&gt;();
                                 }
                             }
                         }).execute();
+
+</code></pre>
+
+<h1 id="tri-des-proprietes">Tri des propriétés</h1>
+<pre><code class="java">
+propertiesSearch.setSort(kCDVPropertySortNone)
+
+/* Possible values (CDVPropertySort):
+* kCDVPropertySortNone
+* kCDVPropertySortNew
+* kCDVPropertySortPriceAsc
+* kCDVPropertySortPriceDesc
+* kCDVPropertySortPricePerMeterAsc
+* kCDVPropertySortPricePerMeterDesc
+* kCDVPropertySortSurfaceAsc
+* kCDVPropertySortSurfaceDesc
+* kCDVPropertySortDistanceAsc
+* kCDVPropertySortDistanceDesc
+*/
+
+</code></pre>
+
+<p><strong>Note importante</strong> : le tri par distance croissante/décroissante (.distanceAsc, .distanceDesc) requiert le paramétrage de cdvGeoDistances avec un seul cdvGeoDistance pour définir le point de départ du tri et sa distance. Cela permet par exemple de "lister les properties jusqu'à 500m de ma position", en paramétrant la position GPS de l'utilisateur comme le centre de cdvGeoDistance et une distance de 0.5 km, et en paramétrant cdvSort = .distanceAsc</p>
+<h1 id="parent-types-type-des-proprietes">Parent types (Type des propriétés)</h1>
+<pre><code class="java">propertiesSearch.setLabelTypes([&quot;house&quot;, &quot;apartment&quot;])
+
+/* Possible values (Array of Strings):
+* - 'apartment'
+* - 'local'
+* - 'house'
+* - 'field'
+* - 'parking'
+* - 'other'
+*/
+
+</code></pre>
+
+<h1 id="style-types-style-des-proprietes">Style types (Style des propriétés)</h1>
+<pre><code class="java">propertiesSearch.setStyleTypes([&quot;renovate&quot;, &quot;prestige&quot;])
+
+/* Possible values (Array of Strings):
+* - 'renovate'
+* - 'prestige'
+* - 'campaign'
+*/
 
 </code></pre>
 
